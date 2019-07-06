@@ -12,9 +12,19 @@ class TodoListViewController: UITableViewController {
 
     var itemArray = ["Find Mike", "Buy Eggs", "Destroy Demogoron"]
     
+    //Interface to user's defaults database
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        //set itemArray as array that is saved in userDefaults:
+        //itemArray = defaults.array(forKey: "TodoListArray") as! [String]
+        
+        //prevent crash when Array doesnt exist:
+        if let items = defaults.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        }
     }
     
     
@@ -67,6 +77,10 @@ class TodoListViewController: UITableViewController {
             //what will happen once user clicks Add Item Button on our alert
             
             self.itemArray.append(textField.text!)
+            
+            //save itemArray to userDefault-DB
+            self.defaults.set(self.itemArray, forKey: "TodoListArray")
+            
             self.tableView.reloadData()
         }
         
@@ -80,6 +94,9 @@ class TodoListViewController: UITableViewController {
         present(alert, animated: true, completion: nil)
         
     }
+    
+    
+    
 
 
 }
